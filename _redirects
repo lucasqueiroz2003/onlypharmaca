@@ -1,0 +1,23 @@
+# Configurações de redirecionamento e roteamento
+
+# Redirecionamento para HTTPS (sempre)
+http://* https://:splat 301
+
+# Roteamento para SPA (Single Page Application)
+# Caso alguém acesse uma rota diretamente, serve o index.html
+/index.html /index.html 200
+/produtos.html /produtos.html 200
+/produto.html /produto.html 200
+/carrinho.html /carrinho.html 200
+/blog.html /blog.html 200
+/posts.html /posts.html 200
+/cadastro.html /cadastro.html 200
+/admin.html /admin.html 200
+/teste-imagens.html /teste-imagens.html 200
+
+# Arquivos estáticos
+/styles.css /styles.css 200
+/images/* /images/:splat 200
+
+# Redirecionamento para página inicial se não encontrar
+/* /index.html 200

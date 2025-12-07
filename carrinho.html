@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho - Only Pharma</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo"><i class="fas fa-dna"></i> Only Pharma</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="produtos.html">Produtos</a></li>
+                <li><a href="blog.html">Depoimentos</a></li>
+                <li><a href="posts.html">Artigos</a></li>
+                <li><a href="cadastro.html">Cadastro</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="carrinho.html" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="container">
+        <h1 style="margin-bottom: 2rem;">Carrinho de Compras</h1>
+        
+        <div class="carrinho-container">
+            <div class="carrinho-items" id="carrinhoItems"></div>
+            <div class="carrinho-resumo">
+                <h3 style="margin-bottom: 1.5rem;">Resumo do Pedido</h3>
+                <div class="resumo-linha"><span>Subtotal:</span> <span id="subtotal">R$ 0,00</span></div>
+                <div class="resumo-total"><span>Total:</span> <span id="total">R$ 0,00</span></div>
+                <button class="btn btn-whatsapp" onclick="finalizarPedido()" style="width: 100%; margin-top: 2rem;">
+                    <i class="fab fa-whatsapp"></i> Finalizar pelo WhatsApp
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Only Pharma</h3>
+                <div class="contact-info"><i class="fas fa-map-marker-alt"></i> Toronto, Canada</div>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <div class="contact-info"><i class="fab fa-whatsapp"></i> <a href="https://wa.me/5565998074000">+55 65 99807-4000</a></div>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Only Pharma.</p></div>
+    </footer>
+
+    <script>
+        let produtosCarrinho = [];
+
+        async function carregarCarrinho() {
+            const carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
+            document.getElementById('cartCount').textContent = carrinho.reduce((s, i) => s + i.quantidade, 0);
+
+            if (carrinho.length === 0) {
+                document.getElementById('carrinhoItems').innerHTML = '<p style="text-align: center; padding: 3rem; color: var(--text-secondary);">Carrinho vazio</p>';
+                return;
+            }
+
+            const response = await fetch('tables/produtos?limit=100');
+            const data = await response.json();
+            produtosCarrinho = data.data;
+
+            let html = '';
+            let subtotal = 0;
+
+            carrinho.forEach(item => {
+                const produto = produtosCarrinho.find(p => p.id === item.id);
+                if (produto) {
+                    const itemTotal = produto.preco * item.quantidade;
+                    subtotal += itemTotal;
+                    html += `
+                        <div class="carrinho-item">
+                            <img src="${produto.imagem}" class="carrinho-item-img">
+                            <div>
+                                <h4>${produto.nome}</h4>
+                                <p style="color: var(--text-secondary);">R$ ${produto.preco.toFixed(2)}</p>
+                                <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                                    <button class="btn-card" onclick="alterarQtd('${item.id}', -1)" style="width: 30px; padding: 0.5rem;">-</button>
+                                    <span style="padding: 0.5rem 1rem; background: var(--bg-darker); border-radius: 5px;">${item.quantidade}</span>
+                                    <button class="btn-card" onclick="alterarQtd('${item.id}', 1)" style="width: 30px; padding: 0.5rem;">+</button>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--purple-light); margin-bottom: 1rem;">R$ ${itemTotal.toFixed(2)}</div>
+                                <button class="btn-card" onclick="removerItem('${item.id}')" style="background: var(--pink); color: white;">
+                                    <i class="fas fa-trash"></i> Remover
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            document.getElementById('carrinhoItems').innerHTML = html;
+            document.getElementById('subtotal').textContent = `R$ ${subtotal.toFixed(2)}`;
+            document.getElementById('total').textContent = `R$ ${subtotal.toFixed(2)}`;
+        }
+
+        function alterarQtd(id, delta) {
+            let carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
+            const item = carrinho.find(i => i.id === id);
+            if (item) {
+                item.quantidade += delta;
+                if (item.quantidade <= 0) carrinho = carrinho.filter(i => i.id !== id);
+                localStorage.setItem('carrinho', JSON.stringify(carrinho));
+                carregarCarrinho();
+            }
+        }
+
+        function removerItem(id) {
+            let carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
+            carrinho = carrinho.filter(i => i.id !== id);
+            localStorage.setItem('carrinho', JSON.stringify(carrinho));
+            carregarCarrinho();
+        }
+
+        function finalizarPedido() {
+            const carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
+            let msg = '*Pedido Only Pharma*\\n\\n';
+            carrinho.forEach(item => {
+                const produto = produtosCarrinho.find(p => p.id === item.id);
+                if (produto) {
+                    msg += `${item.quantidade}x ${produto.nome} - R$ ${(produto.preco * item.quantidade).toFixed(2)}\\n`;
+                }
+            });
+            const total = document.getElementById('total').textContent;
+            msg += `\\n*Total: ${total}*`;
+            window.open(`https://wa.me/5565998074000?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        document.addEventListener('DOMContentLoaded', carregarCarrinho);
+    </script>
+</body>
+</html>

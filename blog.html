@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog & Depoimentos - Only Pharma</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo"><i class="fas fa-dna"></i> Only Pharma</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="produtos.html">Produtos</a></li>
+                <li><a href="blog.html">Depoimentos</a></li>
+                <li><a href="posts.html">Artigos</a></li>
+                <li><a href="cadastro.html">Cadastro</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="carrinho.html" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero bg-biotech-3" style="min-height: 300px;">
+        <div class="hero-content">
+            <h1 style="font-size: 3rem;">Depoimentos de Clientes</h1>
+            <p>Veja o que nossos clientes têm a dizer sobre os resultados</p>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="section-title">
+            <h2>Avaliações Verificadas</h2>
+            <p>Depoimentos reais de clientes satisfeitos</p>
+        </div>
+
+        <div class="depoimentos-grid" id="depoimentosGrid"></div>
+    </section>
+
+    <section class="container">
+        <div class="section-title">
+            <h2>Deixe seu Depoimento</h2>
+            <p>Compartilhe sua experiência com nossos produtos</p>
+        </div>
+
+        <div style="max-width: 800px; margin: 0 auto; background: var(--bg-card); padding: 3rem; border-radius: 20px; border: 1px solid var(--border-color);">
+            <form id="formDepoimento">
+                <div class="form-group">
+                    <label>Seu Nome</label>
+                    <input type="text" id="nome" required>
+                </div>
+                <div class="form-group">
+                    <label>Produto</label>
+                    <select id="produto" required>
+                        <option value="">Selecione o produto</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Avaliação</label>
+                    <div style="display: flex; gap: 0.5rem; font-size: 2rem;">
+                        <span class="estrela" data-nota="1" onclick="selecionarNota(1)">☆</span>
+                        <span class="estrela" data-nota="2" onclick="selecionarNota(2)">☆</span>
+                        <span class="estrela" data-nota="3" onclick="selecionarNota(3)">☆</span>
+                        <span class="estrela" data-nota="4" onclick="selecionarNota(4)">☆</span>
+                        <span class="estrela" data-nota="5" onclick="selecionarNota(5)">☆</span>
+                    </div>
+                    <input type="hidden" id="avaliacao" value="0">
+                </div>
+                <div class="form-group">
+                    <label>Comentário</label>
+                    <textarea id="comentario" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-paper-plane"></i> Enviar Depoimento
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Only Pharma</h3>
+                <div class="contact-info"><i class="fas fa-map-marker-alt"></i> Toronto, Canada</div>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <div class="contact-info"><i class="fab fa-whatsapp"></i> <a href="https://wa.me/5565998074000">+55 65 99807-4000</a></div>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Only Pharma.</p></div>
+    </footer>
+
+    <script>
+        let notaSelecionada = 0;
+
+        async function carregarDepoimentos() {
+            const resp = await fetch('tables/depoimentos?limit=100');
+            const data = await resp.json();
+            const aprovados = data.data.filter(d => d.aprovado);
+
+            document.getElementById('depoimentosGrid').innerHTML = aprovados.map(d => `
+                <div class="depoimento-card fade-in">
+                    <div class="depoimento-header">
+                        <div class="depoimento-nome">${d.nome}</div>
+                        <div class="estrelas">${'⭐'.repeat(d.avaliacao)}</div>
+                    </div>
+                    <p class="depoimento-texto">${d.comentario}</p>
+                    <div class="depoimento-data">${new Date(d.data).toLocaleDateString('pt-BR')}</div>
+                </div>
+            `).join('');
+        }
+
+        async function carregarProdutos() {
+            const resp = await fetch('tables/produtos?limit=100');
+            const data = await resp.json();
+            const select = document.getElementById('produto');
+            data.data.forEach(p => {
+                const option = document.createElement('option');
+                option.value = p.id;
+                option.textContent = p.nome;
+                select.appendChild(option);
+            });
+        }
+
+        function selecionarNota(nota) {
+            notaSelecionada = nota;
+            document.getElementById('avaliacao').value = nota;
+            document.querySelectorAll('.estrela').forEach((e, i) => {
+                e.textContent = i < nota ? '★' : '☆';
+                e.style.color = i < nota ? 'var(--orange)' : 'var(--text-muted)';
+                e.style.cursor = 'pointer';
+            });
+        }
+
+        document.getElementById('formDepoimento').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const depoimento = {
+                id: 'dep_' + Date.now(),
+                nome: document.getElementById('nome').value,
+                produto_id: document.getElementById('produto').value,
+                avaliacao: parseInt(document.getElementById('avaliacao').value),
+                comentario: document.getElementById('comentario').value,
+                data: new Date().toISOString(),
+                aprovado: false
+            };
+
+            if (depoimento.avaliacao === 0) {
+                alert('Por favor, selecione uma avaliação!');
+                return;
+            }
+
+            await fetch('tables/depoimentos', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(depoimento)
+            });
+
+            alert('Depoimento enviado! Aguarde aprovação da equipe.');
+            document.getElementById('formDepoimento').reset();
+            notaSelecionada = 0;
+            selecionarNota(0);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarDepoimentos();
+            carregarProdutos();
+            const carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
+            document.getElementById('cartCount').textContent = carrinho.reduce((s, i) => s + i.quantidade, 0);
+        });
+    </script>
+</body>
+</html>

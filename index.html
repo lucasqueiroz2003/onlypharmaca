@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Only Pharma - Peptídios de Alta Performance | Toronto, Canada</title>
+    <meta name="description" content="Only Pharma oferece os peptídios mais avançados produzidos em Toronto, Canadá. Emagrecimento, performance muscular, anti-aging e mais.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">
+                <i class="fas fa-dna"></i>
+                Only Pharma
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="produtos.html">Produtos</a></li>
+                <li><a href="blog.html">Depoimentos</a></li>
+                <li><a href="posts.html">Artigos</a></li>
+                <li><a href="cadastro.html">Cadastro</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li>
+                    <a href="carrinho.html" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero bg-biotech-1">
+        <div class="hero-content">
+            <h1>Peptídios de Alta Performance</h1>
+            <p>Produzidos em Toronto, Canadá, com tecnologia farmacêutica de ponta para resultados comprovados</p>
+            
+            <div class="hero-badges">
+                <div class="badge">
+                    <i class="fas fa-flask"></i>
+                    <span>Qualidade Farmacêutica</span>
+                </div>
+                <div class="badge">
+                    <i class="fas fa-microscope"></i>
+                    <span>Testado em Laboratório</span>
+                </div>
+                <div class="badge">
+                    <i class="fas fa-leaf"></i>
+                    <span>Made in Canada</span>
+                </div>
+            </div>
+
+            <div class="flex flex-center gap-2">
+                <a href="produtos.html" class="btn btn-primary">
+                    <i class="fas fa-shopping-bag"></i>
+                    Ver Produtos
+                </a>
+                <a href="https://wa.me/5565998074000" target="_blank" class="btn btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                    WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORIAS -->
+    <section class="container">
+        <div class="section-title">
+            <h2>Explore Nossas Categorias</h2>
+            <p>Encontre o peptídio perfeito para seus objetivos</p>
+        </div>
+
+        <div class="categoria-grid" id="categoriasGrid">
+            <!-- Categorias serão carregadas via JavaScript -->
+        </div>
+    </section>
+
+    <!-- PRODUTOS EM DESTAQUE -->
+    <section class="container">
+        <div class="section-title">
+            <h2>Produtos em Destaque</h2>
+            <p>Os peptídios mais procurados e eficazes</p>
+        </div>
+
+        <div class="produto-grid" id="produtosDestaque">
+            <!-- Produtos serão carregados via JavaScript -->
+        </div>
+
+        <div class="text-center mt-2">
+            <a href="produtos.html" class="btn btn-outline">
+                Ver Todos os Produtos
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- SOBRE / DIFERENCIAIS -->
+    <section class="container">
+        <div class="section-title">
+            <h2>Por Que Escolher Only Pharma?</h2>
+            <p>Comprometidos com excelência e resultados</p>
+        </div>
+
+        <div class="categoria-grid">
+            <div class="categoria-card">
+                <i class="fas fa-certificate" style="color: var(--cyan);"></i>
+                <h3>Certificação Internacional</h3>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.9rem;">
+                    Produzidos em Toronto com padrões farmacêuticos rigorosos
+                </p>
+            </div>
+            <div class="categoria-card">
+                <i class="fas fa-shipping-fast" style="color: var(--green);"></i>
+                <h3>Entrega Rápida</h3>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.9rem;">
+                    Envio seguro e discreto para todo o Brasil
+                </p>
+            </div>
+            <div class="categoria-card">
+                <i class="fas fa-headset" style="color: var(--purple-light);"></i>
+                <h3>Suporte Especializado</h3>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.9rem;">
+                    Equipe pronta para esclarecer todas as suas dúvidas
+                </p>
+            </div>
+            <div class="categoria-card">
+                <i class="fas fa-shield-alt" style="color: var(--orange);"></i>
+                <h3>Garantia de Qualidade</h3>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.9rem;">
+                    Cada produto vem com certificado de autenticidade
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Only Pharma</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    Peptídios de alta qualidade produzidos em Toronto, Canadá, para atletas e entusiastas da saúde que buscam resultados superiores.
+                </p>
+                <div class="contact-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Toronto, Canada</span>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Links Rápidos</h3>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="produtos.html">Produtos</a></li>
+                    <li><a href="blog.html">Blog & Depoimentos</a></li>
+                    <li><a href="cadastro.html">Cadastre-se</a></li>
+                    <li><a href="admin.html">Painel Admin</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Categorias</h3>
+                <ul>
+                    <li><a href="produtos.html?cat=emagrecimento">Emagrecimento</a></li>
+                    <li><a href="produtos.html?cat=performance">Performance Muscular</a></li>
+                    <li><a href="produtos.html?cat=antiaging">Anti-Aging</a></li>
+                    <li><a href="produtos.html?cat=nootropicos">Nootrópicos</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <div class="contact-info">
+                    <i class="fab fa-whatsapp"></i>
+                    <a href="https://wa.me/5565998074000" target="_blank">+55 65 99807-4000</a>
+                </div>
+                <div class="contact-info">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:onlyzlucas@gmail.com">onlyzlucas@gmail.com</a>
+                </div>
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <a href="https://wa.me/5565998074000" target="_blank" class="btn btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        Comprar pelo WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Only Pharma. Produzido em Toronto, Canada. Todos os direitos reservados.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem;">
+                <i class="fas fa-exclamation-triangle"></i>
+                Consulte sempre um profissional de saúde antes de usar qualquer suplemento.
+            </p>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Carregar categorias
+        async function loadCategorias() {
+            try {
+                const response = await fetch('tables/categorias');
+                const data = await response.json();
+                
+                const grid = document.getElementById('categoriasGrid');
+                grid.innerHTML = data.data.map(cat => `
+                    <a href="produtos.html?categoria=${cat.id}" class="categoria-card">
+                        <i class="fas ${cat.icone}" style="color: ${cat.cor};"></i>
+                        <h3>${cat.nome}</h3>
+                    </a>
+                `).join('');
+            } catch (error) {
+                console.error('Erro ao carregar categorias:', error);
+            }
+        }
+
+        // Carregar produtos em destaque
+        async function loadProdutosDestaque() {
+            try {
+                const response = await fetch('tables/produtos?limit=6');
+                const data = await response.json();
+                
+                const grid = document.getElementById('produtosDestaque');
+                grid.innerHTML = data.data.filter(p => p.destaque).map(produto => `
+                    <div class="produto-card fade-in">
+                        ${produto.destaque ? '<div class="produto-badge">DESTAQUE</div>' : ''}
+                        <img src="${produto.imagem}" alt="${produto.nome}" class="produto-img">
+                        <div class="produto-info">
+                            <div class="produto-categoria">${getCategoriaNome(produto.categoria_id)}</div>
+                            <h3 class="produto-nome">${produto.nome}</h3>
+                            <p class="produto-descricao">${produto.descricao_curta}</p>
+                            <div class="produto-preco">R$ ${produto.preco.toFixed(2)}</div>
+                            <div class="produto-acoes">
+                                <button class="btn-card btn-add-cart" onclick="adicionarAoCarrinho('${produto.id}')">
+                                    <i class="fas fa-cart-plus"></i>
+                                    Adicionar
+                                </button>
+                                <a href="produto.html?id=${produto.id}" class="btn-card btn-ver-mais">
+                                    Ver Mais
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Erro ao carregar produtos:', error);
+            }
+        }
+
+        function getCategoriaNome(id) {
+            const categorias = {
+                'emagrecimento': 'Emagrecimento',
+                'performance': 'Performance',
+                'antiaging': 'Anti-Aging',
+                'nootropicos': 'Nootrópicos',
+                'suplementos': 'Suplementos'
+            };
+            return categorias[id] || 'Produto';
+        }
+
+        // Adicionar ao carrinho
+        function adicionarAoCarrinho(produtoId) {
+            let carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
+            const existe = carrinho.find(item => item.id === produtoId);
+            
+            if (existe) {
+                existe.quantidade++;
+            } else {
+                carrinho.push({ id: produtoId, quantidade: 1 });
+            }
+            
+            localStorage.setItem('carrinho', JSON.stringify(carrinho));
+            atualizarContadorCarrinho();
+            
+            // Feedback visual
+            alert('Produto adicionado ao carrinho!');
+        }
+
+        // Atualizar contador do carrinho
+        function atualizarContadorCarrinho() {
+            const carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
+            const total = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
+            document.getElementById('cartCount').textContent = total;
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCategorias();
+            loadProdutosDestaque();
+            atualizarContadorCarrinho();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - Only Pharma</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- LOGIN -->
+    <div id="loginScreen" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg-darker);">
+        <div style="background: var(--bg-card); padding: 3rem; border-radius: 20px; border: 1px solid var(--border-color); width: 400px; max-width: 90%;">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: var(--purple-light);">
+                <i class="fas fa-lock"></i> Admin Login
+            </h2>
+            <div class="form-group">
+                <label>Usuário</label>
+                <input type="text" id="username" placeholder="admin">
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" id="password" placeholder="Senha">
+            </div>
+            <button class="btn btn-primary" onclick="login()" style="width: 100%;">
+                <i class="fas fa-sign-in-alt"></i> Entrar
+            </button>
+            <p id="loginError" style="color: var(--pink); text-align: center; margin-top: 1rem; display: none;"></p>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div id="adminPanel" style="display: none;">
+        <header>
+            <nav class="navbar">
+                <div class="logo"><i class="fas fa-dna"></i> Only Pharma Admin</div>
+                <button class="btn btn-outline" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </nav>
+        </header>
+
+        <div class="admin-container">
+            <h1 style="margin-bottom: 2rem;">Painel Administrativo</h1>
+            
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="mudarTab('produtos')">
+                    <i class="fas fa-box"></i> Produtos
+                </button>
+                <button class="tab-btn" onclick="mudarTab('depoimentos')">
+                    <i class="fas fa-comments"></i> Depoimentos
+                </button>
+                <button class="tab-btn" onclick="mudarTab('clientes')">
+                    <i class="fas fa-users"></i> Clientes
+                </button>
+            </div>
+
+            <div id="tab-produtos" class="tab-content active">
+                <button class="btn btn-primary mb-2" onclick="abrirModalProduto()">
+                    <i class="fas fa-plus"></i> Novo Produto
+                </button>
+                <div class="admin-table" id="tabelaProdutos"></div>
+            </div>
+
+            <div id="tab-depoimentos" class="tab-content">
+                <div class="admin-table" id="tabelaDepoimentos"></div>
+            </div>
+
+            <div id="tab-clientes" class="tab-content">
+                <div class="admin-table" id="tabelaClientes"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_USER = 'admin';
+        const ADMIN_PASS = 'onlypharma2025';
+
+        function login() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            
+            if (user === ADMIN_USER && pass === ADMIN_PASS) {
+                sessionStorage.setItem('adminLogado', 'true');
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                carregarDados();
+            } else {
+                const error = document.getElementById('loginError');
+                error.textContent = 'Usuário ou senha incorretos';
+                error.style.display = 'block';
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('adminLogado');
+            location.reload();
+        }
+
+        function mudarTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+        }
+
+        async function carregarDados() {
+            // Produtos
+            const respProdutos = await fetch('tables/produtos?limit=100');
+            const produtos = await respProdutos.json();
+            document.getElementById('tabelaProdutos').innerHTML = `
+                <table>
+                    <thead><tr><th>Imagem</th><th>Nome</th><th>Preço</th><th>Estoque</th><th>Ações</th></tr></thead>
+                    <tbody>
+                        ${produtos.data.map(p => `
+                            <tr>
+                                <td><img src="${p.imagem}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;"></td>
+                                <td>${p.nome}</td>
+                                <td>R$ ${p.preco.toFixed(2)}</td>
+                                <td>${p.estoque}</td>
+                                <td>
+                                    <button class="btn-card" style="background: var(--cyan); color: white; margin-right: 0.5rem;">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-card" style="background: var(--pink); color: white;">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            // Depoimentos
+            const respDep = await fetch('tables/depoimentos?limit=100');
+            const depoimentos = await respDep.json();
+            document.getElementById('tabelaDepoimentos').innerHTML = `
+                <table>
+                    <thead><tr><th>Nome</th><th>Avaliação</th><th>Comentário</th><th>Status</th><th>Ações</th></tr></thead>
+                    <tbody>
+                        ${depoimentos.data.map(d => `
+                            <tr>
+                                <td>${d.nome}</td>
+                                <td><span style="color: var(--orange);">${'⭐'.repeat(d.avaliacao)}</span></td>
+                                <td>${d.comentario.substring(0, 50)}...</td>
+                                <td>${d.aprovado ? '<span style="color: var(--green);">Aprovado</span>' : '<span style="color: var(--orange);">Pendente</span>'}</td>
+                                <td>
+                                    <button class="btn-card" style="background: var(--green); color: white;">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            // Clientes
+            const respClientes = await fetch('tables/clientes?limit=100');
+            const clientes = await respClientes.json();
+            document.getElementById('tabelaClientes').innerHTML = `
+                <table>
+                    <thead><tr><th>Nome</th><th>Email</th><th>Telefone</th><th>Cidade/Estado</th></tr></thead>
+                    <tbody>
+                        ${clientes.data.map(c => `
+                            <tr>
+                                <td>${c.nome}</td>
+                                <td>${c.email}</td>
+                                <td>${c.telefone}</td>
+                                <td>${c.cidade} / ${c.estado}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function abrirModalProduto() {
+            alert('Funcionalidade de adicionar produto em desenvolvimento. Use a API REST tables/produtos com POST.');
+        }
+
+        // Verificar login
+        if (sessionStorage.getItem('adminLogado') === 'true') {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            carregarDados();
+        }
+    </script>
+</body>
+</html>

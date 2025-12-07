@@ -1,0 +1,40 @@
+{
+  "name": "only-pharma",
+  "version": "1.0.0",
+  "description": "Only Pharma - E-commerce de Peptídios Premium | Toronto, Canada",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "build": "echo 'Build complete - Site estático pronto'",
+    "deploy": "echo 'Deploy para Cloudflare Pages - Use dashboard ou git'",
+    "test": "echo 'Teste de funcionalidades - Site estático'"
+  },
+  "keywords": [
+    "peptides",
+    "pharma",
+    "ecommerce",
+    "health",
+    "supplements",
+    "toronto",
+    "canada",
+    "cloudflare-pages"
+  ],
+  "author": "Only Pharma",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/onlypharma/website"
+  },
+  "homepage": "https://onlypharma.pages.dev",
+  "bugs": {
+    "url": "https://github.com/onlypharma/website/issues"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

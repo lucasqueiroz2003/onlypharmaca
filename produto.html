@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Produto - Only Pharma</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo"><i class="fas fa-dna"></i> Only Pharma</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="produtos.html">Produtos</a></li>
+                <li><a href="blog.html">Depoimentos</a></li>
+                <li><a href="posts.html">Artigos</a></li>
+                <li><a href="cadastro.html">Cadastro</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="carrinho.html" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="container" style="padding-top: 3rem;">
+        <div id="produtoDetalhes" style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;">
+            <!-- Conteúdo carregado via JS -->
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Only Pharma</h3>
+                <div class="contact-info"><i class="fas fa-map-marker-alt"></i> Toronto, Canada</div>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <div class="contact-info"><i class="fab fa-whatsapp"></i> <a href="https://wa.me/5565998074000">+55 65 99807-4000</a></div>
+                <div class="contact-info"><i class="fas fa-envelope"></i> <a href="mailto:onlyzlucas@gmail.com">onlyzlucas@gmail.com</a></div>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Only Pharma. Toronto, Canada.</p></div>
+    </footer>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const produtoId = urlParams.get('id');
+
+        async function carregarProduto() {
+            try {
+                const response = await fetch(`tables/produtos/${produtoId}`);
+                const produto = await response.json();
+                
+                document.title = `${produto.nome} - Only Pharma`;
+                document.getElementById('produtoDetalhes').innerHTML = `
+                    <div>
+                        <img src="${produto.imagem}" alt="${produto.nome}" style="width: 100%; border-radius: 20px;">
+                    </div>
+                    <div>
+                        <div class="produto-categoria" style="margin-bottom: 1rem;">${getCategoriaName(produto.categoria_id)}</div>
+                        <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">${produto.nome}</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 1.5rem;">${produto.descricao_curta}</p>
+                        <div class="produto-preco" style="font-size: 3rem; margin-bottom: 2rem;">R$ ${produto.preco.toFixed(2)}</div>
+                        
+                        <div style="display: flex; gap: 1rem; margin-bottom: 3rem;">
+                            <button class="btn btn-primary" onclick="comprarAgora('${produto.id}')" style="flex: 1;">
+                                <i class="fab fa-whatsapp"></i> Comprar Agora
+                            </button>
+                            <button class="btn btn-outline" onclick="adicionarCarrinho('${produto.id}')">
+                                <i class="fas fa-cart-plus"></i> Adicionar ao Carrinho
+                            </button>
+                        </div>
+
+                        <div style="background: var(--bg-card); padding: 2rem; border-radius: 15px; border: 1px solid var(--border-color);">
+                            <h3 style="margin-bottom: 1rem; color: var(--purple-light);">Descrição Completa</h3>
+                            ${produto.descricao_completa}
+                            ${produto.dosagem ? `<p style="margin-top: 1.5rem;"><strong>Dosagem:</strong> ${produto.dosagem}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Erro:', error);
+            }
+        }
+
+        function getCategoriaName(id) {
+            const map = {'emagrecimento': 'Emagrecimento', 'performance': 'Performance', 'antiaging': 'Anti-Aging', 'suplementos': 'Suplementos'};
+            return map[id] || 'Produto';
+        }
+
+        function comprarAgora(id) {
+            const msg = encodeURIComponent(`Olá! Gostaria de comprar o produto: ${document.querySelector('h1').textContent}`);
+            window.open(`https://wa.me/5565998074000?text=${msg}`, '_blank');
+        }
+
+        function adicionarCarrinho(id) {
+            let carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
+            const existe = carrinho.find(i => i.id === id);
+            if (existe) existe.quantidade++; else carrinho.push({id, quantidade: 1});
+            localStorage.setItem('carrinho', JSON.stringify(carrinho));
+            alert('Produto adicionado ao carrinho!');
+            location.reload();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarProduto();
+            const carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
+            document.getElementById('cartCount').textContent = carrinho.reduce((s, i) => s + i.quantidade, 0);
+        });
+    </script>
+</body>
+</html>
